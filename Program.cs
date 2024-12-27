@@ -80,8 +80,8 @@ public class ECRecover
     public static byte[] ECrecoverPublicKey(byte[] message, BigInteger r, BigInteger s, byte v)
     {
         if (v < minValidCode || v > maxValidCode) throw new ArgumentException($"Invalid v=={v}; expected v in [{minValidCode}, {maxValidCode}]");
-        if (r.CompareTo(BigInteger.One) < 0 || r.CompareTo(curve.N) > 0) throw new ArgumentException($"Invalid r value {r}; expected [1, {curve.N}]");
-        if (s.CompareTo(BigInteger.One) < 0 || s.CompareTo(curve.N) > 0) throw new ArgumentException($"Invalid s value {s}; expected [1, {curve.N}]");
+        if (r.SignValue <= 0 || r.CompareTo(curve.N) >= 0) throw new ArgumentException($"Invalid r value {r}; expected [1, {curve.N})");
+        if (s.SignValue <= 0 || s.CompareTo(curve.N) >= 0) throw new ArgumentException($"Invalid s value {s}; expected [1, {curve.N})");
 
         byte sigRecoveryCode = (byte)(v - 27);
         //bool wasCompressed = (sigRecoveryCode&compactSigCompPubKey) != 0;
